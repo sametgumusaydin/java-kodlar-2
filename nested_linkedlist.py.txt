@@ -1,0 +1,82 @@
+class CourseNode:
+    def __init__(self, course_name, midterm, final):
+        self.course_name = course_name
+        self.midterm = midterm
+        self.final = final
+        self.next = None
+
+# Node for students
+class StudentNode:
+    def __init__(self, name):
+        self.name = name
+        self.courses = None  # Each student has their own course list
+        self.next = None
+
+# Linked list for students
+class StudentList:
+    def __init__(self):
+        self.head = None
+
+    def add_student(self, name):
+        new_student = StudentNode(name)
+        if self.head is None:
+            self.head = new_student
+        else:
+            temp = self.head
+            while temp.next:
+                temp = temp.next
+            temp.next = new_student
+
+    def find_student(self, name):
+        temp = self.head
+        while temp:
+            if temp.name == name:
+                return temp
+            temp = temp.next
+        return None
+
+    def add_course(self, name, course_name, midterm, final):
+        student = self.find_student(name)
+        if student is None:
+            print(f"Student named {name} was not found.")
+            return
+        new_course = CourseNode(course_name, midterm, final)
+        if student.courses is None:
+            student.courses = new_course
+        else:
+            temp = student.courses
+            while temp.next:
+                temp = temp.next
+            temp.next = new_course
+
+    def display(self):
+        temp_student = self.head
+        while temp_student:
+            print(f"\ Student: {temp_student.name}")
+            if temp_student.courses is None:
+                print("   No courses added yet.")
+            else:
+                temp_course = temp_student.courses
+                while temp_course:
+                    avg = temp_course.midterm * 0.4 + temp_course.final * 0.6
+                    print(f"   Course: {temp_course.course_name} | Midterm: {temp_course.midterm} | Final: {temp_course.final} | Average: {avg:.2f}")
+                    temp_course = temp_course.next
+            temp_student = temp_student.next
+
+
+# -------------------------
+# Example usage
+# -------------------------
+students = StudentList()
+
+# Add students
+students.add_student("Ahmet Yilmaz")
+students.add_student("Zeynep Kara")
+
+# Add courses
+students.add_course("Ali Yilmaz", "Data Structures", 70, 80)
+students.add_course("Ali Yilmaz", "Database", 60, 75)
+students.add_course("Zeynep Kara", "Statistics", 90, 85)
+
+# Display all
+students.display()
